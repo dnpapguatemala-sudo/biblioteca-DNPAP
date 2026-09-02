@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vía Clínica — Diabetes Mellitus Tipo 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --red: #dc2626; --red-lt: #fee2e2; --red-dk: #991b1b;
+  --blue: #1d4ed8; --blue-lt: #dbeafe; --blue-dk: #1e3a8a;
+  --green: #16a34a; --green-lt: #dcfce7; --green-dk: #14532d;
+  --amber: #d97706; --amber-lt: #fef3c7; --amber-dk: #78350f;
+  --gray: #374151; --gray-lt: #f9fafb; --gray-md: #e5e7eb;
+  --navy: #0f172a; --white: #ffffff;
+  --radius: 12px; --shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f1f5f9;
+  color: var(--gray);
+  min-height: 100vh;
+}
+
+/* ═══ HEADER ═══ */
+.header {
+  background: linear-gradient(135deg, #7f1d1d, #dc2626);
+  color: #fff;
+  padding: 20px 24px;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,.2);
+}
+.header-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.header-brand { display: flex; align-items: center; gap: 12px; }
+.header-icon { font-size: 32px; }
+.header-title { font-size: 18px; font-weight: 700; line-height: 1.2; }
+.header-sub { font-size: 12px; opacity: .8; margin-top: 2px; }
+.header-badge { background: rgba(255,255,255,.2); padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+
+/* ═══ NAV TABS ═══ */
+.nav-wrap { background: #fff; border-bottom: 2px solid var(--gray-md); position: sticky; top: 77px; z-index: 99; box-shadow: 0 2px 8px rgba(0,0,0,.04); }
+.nav { max-width: 900px; margin: 0 auto; display: flex; overflow-x: auto; }
+.nav::-webkit-scrollbar { display: none; }
+.tab-btn {
+  padding: 14px 20px;
+  border: none; background: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px; font-weight: 600;
+  color: #6b7280; cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: .15s;
+  display: flex; align-items: center; gap: 7px;
+}
+.tab-btn:hover { color: var(--red); background: var(--red-lt); }
+.tab-btn.active { color: var(--red); border-bottom-color: var(--red); }
+.tab-icon { font-size: 16px; }
+
+/* ═══ CONTENT ═══ */
+.content { max-width: 900px; margin: 0 auto; padding: 24px 16px 48px; }
+.section { display: none; }
+.section.active { display: block; animation: fadeIn .2s; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ═══ SECTION HEADER ═══ */
+.sec-header {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 20px;
+  padding: 16px 20px;
+  background: #fff;
+  border-radius: var(--radius);
+  border-left: 5px solid var(--red);
+  box-shadow: var(--shadow);
+}
+.sec-letter {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--red); color: #fff;
+  font-size: 22px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.sec-title { font-size: 17px; font-weight: 700; color: var(--navy); }
+.sec-desc { font-size: 13px; color: #6b7280; margin-top: 3px; }
+
+/* ═══ CARDS ═══ */
+.card {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--gray-md);
+}
+.card-title {
+  font-size: 14px; font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.card-icon { font-size: 18px; }
+
+/* ═══ GRID 2 cols ═══ */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+@media (max-width: 600px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+/* ═══ METRIC CARDS ═══ */
+.metric {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+  border: 1px solid var(--gray-md);
+  box-shadow: var(--shadow);
+}
+.metric-val { font-size: 28px; font-weight: 700; color: var(--red); line-height: 1; }
+.metric-lbl { font-size: 12px; color: #6b7280; margin-top: 4px; line-height: 1.3; }
+
+/* ═══ LIST ITEMS ═══ */
+.list-item {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--gray-md);
+  font-size: 14px;
+}
+.list-item:last-child { border-bottom: none; }
+.bullet { width: 8px; height: 8px; border-radius: 50%; background: var(--red); flex-shrink: 0; margin-top: 5px; }
+.bullet-blue { background: var(--blue); }
+.bullet-green { background: var(--green); }
+
+/* ═══ ALERT BOX ═══ */
+.alert {
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  margin-bottom: 14px;
+  display: flex; gap: 10px; align-items: flex-start;
+  font-size: 13px; line-height: 1.5;
+}
+.alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.alert-red { background: var(--red-lt); color: var(--red-dk); border: 1px solid #fca5a5; }
+.alert-blue { background: var(--blue-lt); color: var(--blue-dk); border: 1px solid #93c5fd; }
+.alert-amber { background: var(--amber-lt); color: var(--amber-dk); border: 1px solid #fcd34d; }
+.alert-green { background: var(--green-lt); color: var(--green-dk); border: 1px solid #86efac; }
+
+/* ═══ TRATAMIENTO STEPS ═══ */
+.trat-col-head {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .6px; color: #fff;
+  padding: 8px 12px; border-radius: 8px 8px 0 0;
+  text-align: center;
+}
+.head-sin { background: var(--blue); }
+.head-con { background: var(--red); }
+
+.step-box {
+  background: #fff;
+  border: 1px solid var(--gray-md);
+  border-radius: 0 0 0 0;
+  padding: 12px 14px;
+  border-top: none;
+  position: relative;
+}
+.step-box:last-child { border-radius: 0 0 8px 8px; }
+.step-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: 50%;
+  font-size: 11px; font-weight: 700;
+  margin-right: 8px; flex-shrink: 0;
+  vertical-align: middle;
+}
+.num-blue { background: var(--blue-lt); color: var(--blue-dk); }
+.num-red  { background: var(--red-lt);  color: var(--red-dk); }
+.step-drug { font-size: 13px; font-weight: 600; color: var(--navy); }
+.step-q {
+  font-size: 11px; color: #6b7280; font-style: italic;
+  margin-top: 6px; padding-top: 6px;
+  border-top: 1px dashed var(--gray-md);
+}
+.step-arrow { color: var(--red); font-weight: 700; }
+
+/* ═══ COLESTEROL ═══ */
+.cardio-row {
+  display: flex; gap: 14px; flex-wrap: wrap;
+}
+.cardio-card {
+  flex: 1; min-width: 200px;
+  background: var(--gray-lt);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  border: 1px solid var(--gray-md);
+}
+.cardio-head { font-size: 11px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+.cardio-drug { font-size: 15px; font-weight: 700; color: var(--navy); }
+
+/* ═══ TAGS ═══ */
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.tag {
+  font-size: 12px; font-weight: 600;
+  padding: 3px 10px; border-radius: 20px;
+}
+.tag-blue { background: var(--blue-lt); color: var(--blue-dk); }
+.tag-green { background: var(--green-lt); color: var(--green-dk); }
+.tag-red { background: var(--red-lt); color: var(--red-dk); }
+.tag-amber { background: var(--amber-lt); color: var(--amber-dk); }
+
+/* ═══ CHECKLIST ═══ */
+.check-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--gray-md);
+  cursor: pointer;
+  transition: background .1s;
+  border-radius: 6px;
+  padding-left: 8px;
+}
+.check-row:last-child { border-bottom: none; }
+.check-row:hover { background: var(--gray-lt); }
+.check-row input[type=checkbox] {
+  width: 18px; height: 18px;
+  accent-color: var(--green);
+  cursor: pointer; flex-shrink: 0;
+}
+.check-label { font-size: 14px; color: var(--navy); flex: 1; }
+.check-freq { font-size: 11px; color: #6b7280; white-space: nowrap; }
+.check-row.done .check-label { text-decoration: line-through; color: #9ca3af; }
+
+/* ═══ PROGRESS ═══ */
+.prog-wrap { margin-top: 14px; }
+.prog-bar { height: 8px; background: var(--gray-md); border-radius: 4px; overflow: hidden; }
+.prog-fill { height: 8px; background: var(--green); border-radius: 4px; transition: width .3s; }
+.prog-stats { display: flex; justify-content: space-between; margin-top: 6px; font-size: 12px; color: #6b7280; }
+
+/* ═══ REFERENCIA ═══ */
+.ref-card {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin-bottom: 10px;
+  border: 1px solid var(--gray-md);
+  border-left: 4px solid var(--red);
+  box-shadow: var(--shadow);
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.ref-icon { font-size: 24px; flex-shrink: 0; }
+.ref-title { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+.ref-desc { font-size: 13px; color: #6b7280; line-height: 1.5; }
+
+/* ═══ COL HEADER ═══ */
+.col-head { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: #6b7280; margin-bottom: 8px; }
+
+/* ═══ FOOTER ═══ */
+.footer { background: var(--navy); color: rgba(255,255,255,.6); text-align: center; padding: 16px; font-size: 12px; margin-top: 32px; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <div class="header-icon">🩺</div>
+      <div>
+        <div class="header-title">Vía Clínica — Diabetes Mellitus Tipo 2</div>
+        <div class="header-sub">Programa Nacional ENT y Cáncer · DNPAP / MSPAS Guatemala · v1.0 2025</div>
+      </div>
+    </div>
+    <div class="header-badge">Protocolo oficial OPS/MSPAS</div>
+  </div>
+</header>
+
+<div class="nav-wrap">
+  <nav class="nav">
+    <button class="tab-btn active" onclick="showTab('a', this)"><span class="tab-icon">🔍</span> A · Detección y diagnóstico</button>
+    <button class="tab-btn" onclick="showTab('b', this)"><span class="tab-icon">⚠️</span> B · Evaluación del riesgo</button>
+    <button class="tab-btn" onclick="showTab('c', this)"><span class="tab-icon">💊</span> C · Tratamiento</button>
+    <button class="tab-btn" onclick="showTab('d', this)"><span class="tab-icon">📋</span> D · Complicaciones crónicas</button>
+    <button class="tab-btn" onclick="showTab('e', this)"><span class="tab-icon">🚑</span> E · Criterios de referencia</button>
+    <button class="tab-btn" onclick="showTab('calc', this)"><span class="tab-icon">🧮</span> Calculadora de Riesgo CV</button>
+  </nav>
+</div>
+
+<main class="content">
+
+  <!-- ══════════════ A: DETECCIÓN ══════════════ -->
+  <div class="section active" id="sec-a">
+    <div class="sec-header">
+      <div class="sec-letter">A</div>
+      <div>
+        <div class="sec-title">Detección y Diagnóstico</div>
+        <div class="sec-desc">Identificación de personas con riesgo o síntomas de Diabetes Mellitus Tipo 2</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="card-icon">👤</span> ¿A quién tamizar?</div>
+      <div class="list-item"><div class="bullet"></div><div>Adultos con <strong>factores de riesgo</strong> para diabetes</div></div>
+      <div class="list-item"><div class="bullet"></div><div>Adultos con síntomas como <strong>poliuria, polidipsia, polifagia</strong>, pérdida de peso inexplicable e intolerancia a la fatiga</div></div>
+    </div>
+
+    <div class="alert alert-blue">
+      <div class="alert-icon">ℹ️</div>
+      <div>La prueba diagnóstica debe realizarse con <strong>muestra de sangre venosa</strong>. Utilice equipo de medición de glucosa y presión arterial clínicamente validados.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="card-icon">🩸</span> Medición de glucosa plasmática o capilar</div>
+      <div class="grid-2">
+        <div>
+          <div class="col-head">Glucosa en ayunas</div>
+          <div class="list-item"><div class="bullet bullet-blue"></div><div>Ayuno entre <strong>8 a 14 horas</strong></div></div>
+        </div>
+        <div>
+          <div class="col-head">Glucosa al azar</div>
+          <div class="list-item"><div class="bullet bullet-blue"></div><div>En caso sintomático (sin ayuno requerido)</div></div>
+        </div>
+      </div>
+      <div style="margin-top:8px">
+        <div class="col-head">HbA1c</div>
+        <div class="list-item"><div class="bullet bullet-blue"></div><div>Refleja control glucémico de los últimos 3 meses</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="card-icon">✅</span> Criterios diagnósticos — se cumple alguna de estas condiciones</div>
+      <div class="grid-3">
+        <div class="metric">
+          <div class="metric-val">≥ 126</div>
+          <div class="metric-lbl">mg/dl en ayunas<br>en 2 ocasiones en días distintos</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val">≥ 200</div>
+          <div class="metric-lbl">mg/dl al azar<br>en pacientes sintomáticos</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val">≥ 6.5%</div>
+          <div class="metric-lbl">HbA1c<br>diagnóstico confirmado</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ B: RIESGO ══════════════ -->
+  <div class="section" id="sec-b">
+    <div class="sec-header">
+      <div class="sec-letter">B</div>
+      <div>
+        <div class="sec-title">Evaluación del Riesgo</div>
+        <div class="sec-desc">Valoración de riesgo cardiovascular, renal y metas terapéuticas</div>
+      </div>
+    </div>
+
+    <div class="alert alert-red">
+      <div class="alert-icon">❗</div>
+      <div>Considerar diagnóstico de <strong>hipertensión</strong> en toda persona diagnosticada con diabetes con presión arterial <strong>≥ 130/80 mm Hg</strong> y evaluar el riesgo renal.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="card-icon">🎯</span> Metas terapéuticas</div>
+      <div class="grid-3">
+        <div class="metric">
+          <div class="metric-val">&lt; 7%</div>
+          <div class="metric-lbl">HbA1c — personas &lt;65 años sin complicaciones</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val">&lt; 8%</div>
+          <div class="metric-lbl">HbA1c — personas &gt;65 años con hipoglicemias o expectativa de vida limitada</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val">&lt; 130/80</div>
+          <div class="metric-lbl">mm Hg — meta de presión arterial</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="card-icon">💉</span> Vacunas recomendadas</div>
+      <div class="tags">
+        <span class="tag tag-blue">🫁 DT</span>
+        <span class="tag tag-blue">🫁 Neumococo</span>
+        <span class="tag tag-blue">🤧 Influenza</span>
+        <span class="tag tag-blue">🦠 COVID-19</span>
+      </div>
+    </div>
+
+    <div class="alert alert-amber">
+      <div class="alert-icon">📱</div>
+      <div>Utilice la <strong>calculadora de riesgo cardiovascular</strong> disponible en la vía clínica para estratificar el riesgo de cada paciente.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════ C: TRATAMIENTO ══════════════ -->
+  <div class="section" id="sec-c">
+    <div class="sec-header">
+      <div class="sec-letter">C</div>
+      <div>
+        <div class="sec-title">Tratamiento Integral de la Diabetes</div>
+        <div class="sec-desc">Iniciar tratamiento farmacológico y no farmacológico. Seguimiento interdisciplinario.</div>
+      </div>
+    </div>
+
+    <div class="alert alert-blue">
+      <div class="alert-icon">📌</div>
+      <div>Promueva el <strong>seguimiento interdisciplinario</strong> por equipo de salud y brinde <strong>plan educacional en cada consulta</strong> al servicio de salud.</div>
+    </div>
+
+    <!-- TRATAMIENTO HIPOGLUCEMIANTE -->
+    <div class="card">
+      <div class="card-title"><span class="card-icon">💊</span> Tratamiento hipoglucemiante — esquema escalonado</div>
+      <div class="grid-2" style="margin-bottom:0">
+        <!-- SIN ECV/RENAL -->
+        <div>
+          <div class="trat-col-head head-sin">Sin enfermedad cardiovascular o renal</div>
+          <div class="step-box">
+            <div><span class="step-num num-blue">1</span><span class="step-drug">Metformina 850 mg/día</span></div>
+            <div class="step-q">¿No alcanza meta al mes? <span class="step-arrow">→ Paso 2</span></div>
+          </div>
+          <div class="step-box">
+            <div><span class="step-num num-blue">2</span><span class="step-drug">Metformina 850 mg c/12h</span></div>
+            <div class="step-q">¿No alcanza meta a los 3 meses? <span class="step-arrow">→ Paso 3</span></div>
+          </div>
+          <div class="step-box">
+            <div><span class="step-num num-blue">3</span><span class="step-drug">Metformina 850 c/12h<br>+ Glicazida 30 mg LM c/24h</span></div>
+            <div class="step-q">¿No alcanza meta a los 3 meses? <span class="step-arrow">→ Paso 4</span></div>
+          </div>
+          <div class="step-box">
+            <div><span class="step-num num-blue">4</span><span class="step-drug">Metformina 850 c/12h<br>Glicazida 30 LM c/24h<br>+ iSGLT2 c/24h</span></div>
+            <div class="step-q">¿No alcanza meta a los 3 meses? <span class="step-arrow">→ Paso 5</span></div>
+          </div>
+          <div class="step-box">
+            <div><span class="step-num num-blue">5</span><span class="step-drug">Metformina 850 c/12h<br>Glicazida 60 mg LM c/24h<br>+ iSGLT2 c/24h</span></div>
+            <div class="step-q" style="color:var(--red-dk)">⚠️ Referencia a servicio de mayor complejidad</div>
+          </div>
+        </div>
+        <!-- CON ECV/RENAL -->
+        <div>
+          <div class="trat-col-head head-con">Con enfermedad cardiovascular o renal</div>
+          <div class="step-box">
+            <div><span class="step-num num-red">1</span><span class="step-drug">Metformina 850 mg/día</span></div>
+            <div class="step-q">¿No alcanza meta al mes? <span class="step-arrow">→ Paso 2</span></div>
+          </div>
+          <div class="step-box">
+            <div><span class="step-num num-red">2</span><span class="step-drug">Metformina 850 mg c/12h</span></div>
+            <div class="step-q">¿No alcanza meta a los 3 meses? <span class="step-arrow">→ Paso 3</span></div>
+          </div>
+          <div class="step-box">
+            <div><span class="step-num num-red">3</span><span class="step-drug">Metformina 850 c/12h<br>+ iSGLT2 c/24h</span></div>
+            <div class="step-q">¿No alcanza meta a los 3 meses? <span class="step-arrow">→ Paso 4</span></div>
+          </div>
+          <div class="step-box">
+            <div><span class="step-num num-red">4</span><span class="step-drug">Metformina 850 c/12h<br>iSGLT2 c/24h<br>+ Glicazida c/24h</span></div>
+            <div class="step-q">¿No alcanza meta a los 3 meses? <span class="step-arrow">→ Paso 5</span></div>
+          </div>
+          <div class="step-box">
+            <div><span class="step-num num-red">5</span><span class="step-drug">Metformina 850 c/12h<br>Glicazida 60 mg LM c/24h<br>+ iSGLT2 c/24h</span></div>
+            <div class="step-q" style="color:var(--red-dk)">⚠️ Referencia a servicio de mayor complejidad</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MANEJO CARDIO-RENAL -->
+    <div class="card">
+      <div class="card-title"><span class="card-icon">❤️</span> Manejo de riesgo cardio-renal — Atorvastatina</div>
+      <div class="cardio-row">
+        <div class="cardio-card">
+          <div class="cardio-head">Adulto &lt;40 años SIN enf. cardiovascular</div>
+          <div class="cardio-drug">Atorvastatina 20 mg c/24h</div>
+        </div>
+        <div class="cardio-card">
+          <div class="cardio-head">Adulto ≥40 años CON enf. cardiovascular, independiente de la edad</div>
+          <div class="cardio-drug">Atorvastatina 40 mg c/24h</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NO FARMACOLÓGICO -->
+    <div class="card">
+      <div class="card-title"><span class="card-icon">🌿</span> Tratamiento no farmacológico</div>
+      <div class="grid-2">
+        <div>
+          <div class="list-item"><div class="bullet bullet-green"></div><div>Evitar consumo de <strong>tabaco y cigarrillos</strong></div></div>
+          <div class="list-item"><div class="bullet bullet-green"></div><div>Mantener <strong>peso adecuado</strong></div></div>
+          <div class="list-item"><div class="bullet bullet-green"></div><div><strong>30 minutos</strong> de actividad física diaria</div></div>
+          <div class="list-item"><div class="bullet bullet-green"></div><div>No fumar, evitar consumo de <strong>alcohol</strong></div></div>
+        </div>
+        <div>
+          <div class="list-item"><div class="bullet bullet-green"></div><div>Evitar consumo de <strong>alimentos ultraprocesados</strong></div></div>
+          <div class="list-item"><div class="bullet bullet-green"></div><div>Circunferencia cintura: <strong>&lt;90 cm hombre / &lt;80 cm mujer</strong></div></div>
+          <div class="list-item"><div class="bullet bullet-green"></div><div><strong>Cuidado del pie</strong> diabético</div></div>
+          <div class="list-item"><div class="bullet bullet-green"></div><div>Participar en <strong>club de ayuda mutua</strong></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ D: COMPLICACIONES ══════════════ -->
+  <div class="section" id="sec-d">
+    <div class="sec-header">
+      <div class="sec-letter">D</div>
+      <div>
+        <div class="sec-title">Evaluación de Complicaciones Crónicas</div>
+        <div class="sec-desc">Lista de verificación clínica para el seguimiento del paciente con DM2</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="card-icon">✅</span> En cada consulta — marque lo que realizó</div>
+      <div id="check-list"></div>
+      <div class="prog-wrap">
+        <div class="prog-bar"><div class="prog-fill" id="prog" style="width:0%"></div></div>
+        <div class="prog-stats">
+          <span id="prog-txt">0 de 4 completados</span>
+          <span id="prog-pct">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="card-icon">📅</span> Al diagnóstico y luego una vez al año</div>
+      <div class="list-item"><div class="bullet"></div><div><strong>Evaluación oftalmológica</strong> completa</div></div>
+      <div class="list-item"><div class="bullet"></div><div><strong>Perfil de lípidos</strong> (colesterol total, LDL, HDL, triglicéridos)</div></div>
+      <div class="list-item"><div class="bullet"></div><div><strong>Descartar infección por tuberculosis</strong></div></div>
+    </div>
+
+    <div class="alert alert-blue">
+      <div class="alert-icon">📚</div>
+      <div>Se recomienda consultar las vías clínicas de <strong>Hipertensión Arterial y Salud Renal Crónica</strong> para el manejo conjunto de complicaciones.</div>
+    </div>
+
+    <div class="alert alert-amber">
+      <div class="alert-icon">🔁</div>
+      <div><strong>Evaluar adherencia a la vía clínica en cada visita.</strong> Agregar la medicación en una sola toma diaria (ASDT) cuando sea posible para mejorar la adherencia.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════ E: REFERENCIA ══════════════ -->
+  <div class="section" id="sec-e">
+    <div class="sec-header">
+      <div class="sec-letter">E</div>
+      <div>
+        <div class="sec-title">Criterios de Referencia</div>
+        <div class="sec-desc">Condiciones que requieren traslado a servicio de mayor complejidad</div>
+      </div>
+    </div>
+
+    <div class="alert alert-red">
+      <div class="alert-icon">🚨</div>
+      <div><strong>Evaluar adherencia a la vía clínica en cada visita.</strong> Si el paciente cumple alguno de los criterios siguientes, refiéralo de inmediato.</div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-icon">📉</div>
+      <div>
+        <div class="ref-title">Hipoglicemias severas a repetición</div>
+        <div class="ref-desc">Glucemia &lt;70 mg/dl) o síntomas de hipoglicemia de repetición que no se controlan con el manejo actual.</div>
+      </div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-icon">📊</div>
+      <div>
+        <div class="ref-title">HbA1c fuera de meta con tratamiento máximo</div>
+        <div class="ref-desc">HbA1c &gt;10% o glucemia en ayunas &gt;300 mg/dl a pesar del esquema de paso 5.</div>
+      </div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-icon">💉</div>
+      <div>
+        <div class="ref-title">Requerimiento de insulina</div>
+        <div class="ref-desc">Necesidad de insulinoterapia y falta de entrenamiento del equipo tratante para su manejo.</div>
+      </div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-icon">🦶</div>
+      <div>
+        <div class="ref-title">Complicaciones que ameritan seguimiento especializado</div>
+        <div class="ref-desc">Pie diabético, nefropatía, retinopatía, neuropatía, cardiopatías — cualquier complicación que requiera manejo de especialista.</div>
+      </div>
+    </div>
+
+    <div class="ref-card">
+      <div class="ref-icon">🫘</div>
+      <div>
+        <div class="ref-title">Filtrado glomerular reducido — Programa de Salud Renal</div>
+        <div class="ref-desc">Personas con tasa de filtrado glomerular <strong>&lt;60 mL/min/1.73 m²</strong>. Referir al Programa de Salud Renal para seguimiento especializado de enfermedad renal crónica.</div>
+      </div>
+    </div>
+
+    <div class="alert alert-green">
+      <div class="alert-icon">✅</div>
+      <div>Recuerde documentar el motivo de referencia, el tratamiento actual y los últimos resultados de laboratorio al momento del traslado.</div>
+    </div>
+  </div>
+
+
+  <!-- ══ CALCULADORA ══ -->
+  <div class="section" id="sec-calc">
+    <div class="sec-header">
+      <div class="sec-letter" style="font-size:20px;background:#1d4ed8">🧮</div>
+      <div>
+        <div class="sec-title">Calculadora de Riesgo Cardiovascular</div>
+        <div class="sec-desc">Factores de riesgo en DM2 — OPS/MSPAS Guatemala · Apoyo clínico orientativo</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start" id="calc-wrap">
+
+      <!-- FORMULARIO -->
+      <div class="card" style="margin-bottom:0">
+        <div class="card-title">📝 Datos del paciente</div>
+
+        <div style="margin-bottom:14px">
+          <label style="display:block;font-size:13px;font-weight:700;color:#0f172a;margin-bottom:5px">Edad (años)</label>
+          <input type="number" id="cv-edad" min="18" max="100" placeholder="Ej. 55"
+            style="width:100%;padding:10px 12px;border:2px solid #e5e7eb;border-radius:10px;font-size:14px;font-family:inherit;outline:none"
+            onfocus="this.style.borderColor='#1d4ed8'" onblur="this.style.borderColor='#e5e7eb'">
+          <p id="cv-e-edad" style="color:#dc2626;font-size:12px;margin:3px 0 0;display:none">Ingrese edad entre 18 y 100.</p>
+        </div>
+
+        <div style="margin-bottom:14px">
+          <label style="display:block;font-size:13px;font-weight:700;color:#0f172a;margin-bottom:5px">Sexo</label>
+          <div style="display:flex;gap:8px">
+            <button id="cv-m" onclick="cvSel('sexo','m')"
+              style="flex:1;padding:9px;border:2px solid #e5e7eb;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:#6b7280;font-family:inherit">
+              Hombre
+            </button>
+            <button id="cv-f" onclick="cvSel('sexo','f')"
+              style="flex:1;padding:9px;border:2px solid #e5e7eb;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:#6b7280;font-family:inherit">
+              Mujer
+            </button>
+          </div>
+          <p id="cv-e-sexo" style="color:#dc2626;font-size:12px;margin:3px 0 0;display:none">Seleccione el sexo.</p>
+        </div>
+
+        <div style="margin-bottom:14px">
+          <label style="display:block;font-size:13px;font-weight:700;color:#0f172a;margin-bottom:5px">Presión arterial sistólica (mm Hg)</label>
+          <input type="number" id="cv-pas" min="80" max="220" placeholder="Ej. 140"
+            style="width:100%;padding:10px 12px;border:2px solid #e5e7eb;border-radius:10px;font-size:14px;font-family:inherit;outline:none"
+            onfocus="this.style.borderColor='#1d4ed8'" onblur="this.style.borderColor='#e5e7eb'">
+          <p id="cv-e-pas" style="color:#dc2626;font-size:12px;margin:3px 0 0;display:none">Ingrese valor entre 80 y 220.</p>
+        </div>
+
+        <div style="margin-bottom:14px">
+          <label style="display:block;font-size:13px;font-weight:700;color:#0f172a;margin-bottom:5px">HbA1c (%)</label>
+          <input type="number" id="cv-hba1c" step="0.1" min="5" max="20" placeholder="Ej. 8.5"
+            style="width:100%;padding:10px 12px;border:2px solid #e5e7eb;border-radius:10px;font-size:14px;font-family:inherit;outline:none"
+            onfocus="this.style.borderColor='#1d4ed8'" onblur="this.style.borderColor='#e5e7eb'">
+          <p id="cv-e-hba1c" style="color:#dc2626;font-size:12px;margin:3px 0 0;display:none">Ingrese valor entre 5 y 20.</p>
+        </div>
+
+        <div style="margin-bottom:14px">
+          <label style="display:block;font-size:13px;font-weight:700;color:#0f172a;margin-bottom:5px">
+            Colesterol total (mg/dl) <span style="font-weight:400;color:#9ca3af;font-size:11px">opcional</span>
+          </label>
+          <input type="number" id="cv-col" min="100" max="500" placeholder="Ej. 220"
+            style="width:100%;padding:10px 12px;border:2px solid #e5e7eb;border-radius:10px;font-size:14px;font-family:inherit;outline:none"
+            onfocus="this.style.borderColor='#1d4ed8'" onblur="this.style.borderColor='#e5e7eb'">
+        </div>
+
+        <div style="margin-bottom:14px">
+          <label style="display:block;font-size:13px;font-weight:700;color:#0f172a;margin-bottom:5px">¿Fuma actualmente?</label>
+          <div style="display:flex;gap:8px">
+            <button id="cv-fsi" onclick="cvSel('fuma','1')" style="flex:1;padding:9px;border:2px solid #e5e7eb;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:#6b7280;font-family:inherit">Sí</button>
+            <button id="cv-fno" onclick="cvSel('fuma','0')" style="flex:1;padding:9px;border:2px solid #e5e7eb;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:#6b7280;font-family:inherit">No</button>
+          </div>
+          <p id="cv-e-fuma" style="color:#dc2626;font-size:12px;margin:3px 0 0;display:none">Seleccione una opción.</p>
+        </div>
+
+        <div style="margin-bottom:14px">
+          <label style="display:block;font-size:13px;font-weight:700;color:#0f172a;margin-bottom:5px">¿Enfermedad cardiovascular conocida?</label>
+          <div style="display:flex;gap:8px">
+            <button id="cv-ecvsi" onclick="cvSel('ecv','1')" style="flex:1;padding:9px;border:2px solid #e5e7eb;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:#6b7280;font-family:inherit">Sí</button>
+            <button id="cv-ecvno" onclick="cvSel('ecv','0')" style="flex:1;padding:9px;border:2px solid #e5e7eb;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:#6b7280;font-family:inherit">No</button>
+          </div>
+          <p id="cv-e-ecv" style="color:#dc2626;font-size:12px;margin:3px 0 0;display:none">Seleccione una opción.</p>
+        </div>
+
+        <div style="margin-bottom:14px">
+          <label style="display:block;font-size:13px;font-weight:700;color:#0f172a;margin-bottom:5px">¿Enfermedad renal crónica?</label>
+          <div style="display:flex;gap:8px">
+            <button id="cv-ercsi" onclick="cvSel('erc','1')" style="flex:1;padding:9px;border:2px solid #e5e7eb;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:#6b7280;font-family:inherit">Sí</button>
+            <button id="cv-ercno" onclick="cvSel('erc','0')" style="flex:1;padding:9px;border:2px solid #e5e7eb;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:#6b7280;font-family:inherit">No</button>
+          </div>
+          <p id="cv-e-erc" style="color:#dc2626;font-size:12px;margin:3px 0 0;display:none">Seleccione una opción.</p>
+        </div>
+
+        <div style="margin-bottom:20px">
+          <label style="display:block;font-size:13px;font-weight:700;color:#0f172a;margin-bottom:5px">¿Hipertensión arterial?</label>
+          <div style="display:flex;gap:8px">
+            <button id="cv-htasi" onclick="cvSel('hta','1')" style="flex:1;padding:9px;border:2px solid #e5e7eb;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:#6b7280;font-family:inherit">Sí</button>
+            <button id="cv-htano" onclick="cvSel('hta','0')" style="flex:1;padding:9px;border:2px solid #e5e7eb;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:#6b7280;font-family:inherit">No</button>
+          </div>
+          <p id="cv-e-hta" style="color:#dc2626;font-size:12px;margin:3px 0 0;display:none">Seleccione una opción.</p>
+        </div>
+
+        <button onclick="cvCalcular()"
+          style="width:100%;padding:14px;border-radius:12px;background:#dc2626;color:#fff;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:8px">
+          🧮 Calcular riesgo cardiovascular
+        </button>
+        <button onclick="cvLimpiar()"
+          style="width:100%;padding:10px;border-radius:12px;background:#fff;color:#6b7280;border:2px solid #e5e7eb;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">
+          ↺ Limpiar formulario
+        </button>
+      </div>
+
+      <!-- RESULTADO -->
+      <div>
+        <div id="cv-placeholder" style="background:#f9fafb;border-radius:12px;border:2px dashed #e5e7eb;padding:48px 24px;text-align:center;color:#9ca3af">
+          <div style="font-size:48px;margin-bottom:12px">🫀</div>
+          <div style="font-size:14px;font-weight:600;margin-bottom:4px">Resultado aparecerá aquí</div>
+          <div style="font-size:12px">Complete el formulario y presione calcular</div>
+        </div>
+
+        <div id="cv-resultado" style="display:none">
+          <div id="cv-resbox" style="border-radius:12px;padding:24px;border:2px solid;text-align:center;margin-bottom:14px">
+            <div style="display:flex;gap:8px;justify-content:center;margin-bottom:14px">
+              <div id="cv-s0" style="width:20px;height:20px;border-radius:50%;background:#16a34a;opacity:.2;transition:opacity .3s"></div>
+              <div id="cv-s1" style="width:20px;height:20px;border-radius:50%;background:#d97706;opacity:.2;transition:opacity .3s"></div>
+              <div id="cv-s2" style="width:20px;height:20px;border-radius:50%;background:#f97316;opacity:.2;transition:opacity .3s"></div>
+              <div id="cv-s3" style="width:20px;height:20px;border-radius:50%;background:#dc2626;opacity:.2;transition:opacity .3s"></div>
+            </div>
+            <div id="cv-pct" style="font-size:40px;font-weight:700;margin-bottom:4px"></div>
+            <div id="cv-nivel" style="font-size:15px;font-weight:700;margin-bottom:10px"></div>
+            <div id="cv-desc" style="font-size:13px;line-height:1.6;text-align:left"></div>
+          </div>
+
+          <div class="card" style="margin-bottom:14px">
+            <div class="card-title">💡 Recomendaciones clínicas</div>
+            <div id="cv-recs"></div>
+          </div>
+
+          <div class="alert alert-amber">
+            <div class="alert-icon">⚠️</div>
+            <div style="font-size:13px">Herramienta de apoyo. El juicio médico es el elemento principal. No reemplaza la evaluación clínica completa.</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <div class="card-title">📊 Referencia de niveles</div>
+          <div class="list-item"><div class="bullet bullet-green"></div><div><strong>Bajo</strong> — &lt;10% · Control rutinario</div></div>
+          <div class="list-item"><div class="bullet" style="background:#d97706"></div><div><strong>Moderado</strong> — 10–20% · Intensificar tratamiento</div></div>
+          <div class="list-item"><div class="bullet" style="background:#f97316"></div><div><strong>Alto</strong> — 20–30% · Farmacoterapia activa</div></div>
+          <div class="list-item"><div class="bullet"></div><div><strong>Muy alto</strong> — &gt;30% · Manejo especializado urgente</div></div>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      @media(max-width:640px){ #calc-wrap{ grid-template-columns:1fr !important; } }
+    </style>
+  </div>
+
+</main>
+
+<footer class="footer">
+  Vía Clínica DM2 · Programa Nacional ENT y Cáncer — DNPAP / MSPAS Guatemala · Versión 1.0 · 2025<br>
+  OPS/OMS · Para ampliar información consulte las referencias de la Red Integral de Servicios de Salud
+</footer>
+
+<script>
+// ═══ NAVEGACIÓN ═══
+function showTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ═══ CHECKLIST ═══
+const checks = [
+  { label: 'Medición de la presión arterial', freq: 'Cada consulta' },
+  { label: 'Evaluación de los pies', freq: 'Cada consulta' },
+  { label: 'Palpación de pulsos pedio y tibial posterior', freq: 'Cada consulta' },
+  { label: 'Evaluación de función renal', freq: 'Cada consulta' },
+];
+
+const list = document.getElementById('check-list');
+checks.forEach((c, i) => {
+  const row = document.createElement('div');
+  row.className = 'check-row';
+  row.id = 'row-' + i;
+  row.innerHTML = `
+    <input type="checkbox" id="chk-${i}" onchange="updateCheck(${i})">
+    <label class="check-label" for="chk-${i}">${c.label}</label>
+    <span class="check-freq">${c.freq}</span>
+  `;
+  list.appendChild(row);
+});
+
+function updateCheck(idx) {
+  const chk = document.getElementById('chk-' + idx);
+  const row = document.getElementById('row-' + idx);
+  row.classList.toggle('done', chk.checked);
+  const done = document.querySelectorAll('#check-list input:checked').length;
+  const total = checks.length;
+  const pct = Math.round(done / total * 100);
+  document.getElementById('prog').style.width = pct + '%';
+  document.getElementById('prog-txt').textContent = `${done} de ${total} completados`;
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('prog').style.background = pct === 100 ? '#16a34a' : '#2563eb';
+}
+
+// ══════════════════════════════
+// CALCULADORA DE RIESGO CV
+// ══════════════════════════════
+const cvRadios = {};
+const cvBtnMap = {
+  'sexo': { 'm':'cv-m',   'f':'cv-f'   },
+  'fuma': { '1':'cv-fsi', '0':'cv-fno' },
+  'ecv':  { '1':'cv-ecvsi','0':'cv-ecvno'},
+  'erc':  { '1':'cv-ercsi','0':'cv-ercno'},
+  'hta':  { '1':'cv-htasi','0':'cv-htano'}
+};
+
+function cvSel(name, val) {
+  cvRadios[name] = val;
+  // Apagar todos los del grupo
+  Object.values(cvBtnMap[name]).forEach(id => {
+    const b = document.getElementById(id);
+    b.style.background = '#fff';
+    b.style.borderColor = '#e5e7eb';
+    b.style.color = '#6b7280';
+  });
+  // Encender el seleccionado
+  const selBtn = document.getElementById(cvBtnMap[name][val]);
+  selBtn.style.background = '#fee2e2';
+  selBtn.style.borderColor = '#dc2626';
+  selBtn.style.color = '#991b1b';
+  // Ocultar error
+  const err = document.getElementById('cv-e-' + name);
+  if (err) err.style.display = 'none';
+}
+
+function cvShowErr(id, show) {
+  const el = document.getElementById('cv-e-' + id);
+  if (el) el.style.display = show ? 'block' : 'none';
+}
+
+function cvCalcular() {
+  const edad  = parseInt(document.getElementById('cv-edad').value);
+  const pas   = parseInt(document.getElementById('cv-pas').value);
+  const hba1c = parseFloat(document.getElementById('cv-hba1c').value);
+  const col   = parseInt(document.getElementById('cv-col').value) || 200;
+
+  let ok = true;
+  if (isNaN(edad)  || edad  < 18 || edad  > 100) { cvShowErr('edad',  true); ok=false; } else cvShowErr('edad',  false);
+  if (isNaN(pas)   || pas   < 80  || pas   > 220) { cvShowErr('pas',   true); ok=false; } else cvShowErr('pas',   false);
+  if (isNaN(hba1c) || hba1c < 5   || hba1c > 20)  { cvShowErr('hba1c', true); ok=false; } else cvShowErr('hba1c', false);
+  if (!cvRadios.sexo) { cvShowErr('sexo', true); ok=false; }
+  if (!cvRadios.fuma) { cvShowErr('fuma', true); ok=false; }
+  if (!cvRadios.ecv)  { cvShowErr('ecv',  true); ok=false; }
+  if (!cvRadios.erc)  { cvShowErr('erc',  true); ok=false; }
+  if (!cvRadios.hta)  { cvShowErr('hta',  true); ok=false; }
+  if (!ok) return;
+
+  // Puntuación ponderada
+  let pts = 0;
+  pts += edad >= 70 ? 5 : edad >= 60 ? 4 : edad >= 50 ? 3 : edad >= 40 ? 2 : 1;
+  if (cvRadios.sexo === 'm') pts += 1;
+  pts += pas >= 180 ? 5 : pas >= 160 ? 4 : pas >= 140 ? 3 : pas >= 130 ? 2 : 0;
+  pts += hba1c >= 10 ? 4 : hba1c >= 8 ? 3 : hba1c >= 7 ? 2 : 1;
+  pts += col >= 280 ? 3 : col >= 240 ? 2 : col >= 200 ? 1 : 0;
+  if (cvRadios.fuma === '1') pts += 3;
+  if (cvRadios.ecv  === '1') pts += 6;
+  if (cvRadios.erc  === '1') pts += 4;
+  if (cvRadios.hta  === '1') pts += 3;
+
+  let pct = Math.min(Math.round((pts / 34) * 45), 45);
+  if (cvRadios.ecv === '1' || cvRadios.erc === '1') pct = Math.max(pct, 31);
+
+  let nivel, bg, bc, tc, semIdx, desc, recs;
+  if (pct <= 9) {
+    nivel='Riesgo BAJO'; semIdx=0; bg='#dcfce7'; bc='#86efac'; tc='#14532d';
+    desc='Riesgo estimado de ' + pct + '% de evento cardiovascular a 10 años. Manejable con cambios de estilo de vida y control glucémico.';
+    recs=[['✅','Continuar con Metformina como primera línea'],['🥗','Reforzar plan alimentario y actividad física 30 min/día'],['📅','Control cada 3 meses · HbA1c semestral']];
+  } else if (pct <= 19) {
+    nivel='Riesgo MODERADO'; semIdx=1; bg='#fef3c7'; bc='#fcd34d'; tc='#78350f';
+    desc='Riesgo estimado de ' + pct + '% a 10 años. Requiere intensificación del tratamiento y monitoreo más frecuente.';
+    recs=[['💊','Revisar esquema — considerar paso 3 o 4 con iSGLT2'],['❤️','Iniciar o ajustar Atorvastatina según edad y riesgo'],['🧪','Solicitar perfil lipídico completo y función renal']];
+  } else if (pct <= 30) {
+    nivel='Riesgo ALTO'; semIdx=2; bg='#fee2e2'; bc='#fca5a5'; tc='#991b1b';
+    desc='Riesgo estimado de ' + pct + '% a 10 años. Tratamiento farmacológico activo y seguimiento estrecho obligatorios.';
+    recs=[['🔴','Esquema escalonado paso 4–5 con iSGLT2 + Glicazida'],['💊','Atorvastatina 40 mg si ≥40 años con ECV'],['🏥','Interconsulta a cardiología y nefrología']];
+  } else {
+    nivel='Riesgo MUY ALTO'; semIdx=3; bg='#7f1d1d'; bc='#991b1b'; tc='#ffffff';
+    desc='Riesgo estimado mayor al 30% a 10 años. Manejo multidisciplinario urgente e inmediato requerido.';
+    recs=[['🚨','Referencia urgente a cardiología y/o nefrología'],['🫘','Evaluar filtrado glomerular — referir al Programa de Salud Renal'],['📅','Control quincenal hasta estabilización clínica']];
+  }
+
+  const box = document.getElementById('cv-resbox');
+  box.style.background = bg;
+  box.style.borderColor = bc;
+
+  const pctEl = document.getElementById('cv-pct');
+  pctEl.textContent = pct + '%';
+  pctEl.style.color = tc;
+
+  const nivEl = document.getElementById('cv-nivel');
+  nivEl.textContent = nivel;
+  nivEl.style.color = tc;
+
+  const descEl = document.getElementById('cv-desc');
+  descEl.textContent = desc;
+  descEl.style.color = tc;
+
+  document.getElementById('cv-recs').innerHTML = recs.map(r =>
+    '<div style="display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px solid #e5e7eb">' +
+    '<span style="font-size:16px;flex-shrink:0">' + r[0] + '</span>' +
+    '<span style="font-size:13px;color:#0f172a;line-height:1.5">' + r[1] + '</span></div>'
+  ).join('');
+
+  [0,1,2,3].forEach(i => {
+    document.getElementById('cv-s'+i).style.opacity = (i === semIdx) ? '1' : '0.2';
+  });
+
+  document.getElementById('cv-placeholder').style.display = 'none';
+  document.getElementById('cv-resultado').style.display = 'block';
+}
+
+function cvLimpiar() {
+  ['cv-edad','cv-pas','cv-hba1c','cv-col'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  // Resetear radios
+  Object.keys(cvBtnMap).forEach(name => {
+    delete cvRadios[name];
+    Object.values(cvBtnMap[name]).forEach(id => {
+      const b = document.getElementById(id);
+      if (b) { b.style.background='#fff'; b.style.borderColor='#e5e7eb'; b.style.color='#6b7280'; }
+    });
+  });
+  // Ocultar errores
+  ['edad','pas','hba1c','sexo','fuma','ecv','erc','hta'].forEach(k => cvShowErr(k, false));
+  document.getElementById('cv-placeholder').style.display = 'block';
+  document.getElementById('cv-resultado').style.display = 'none';
+}
+
+</script>
+</body>
+</html>
